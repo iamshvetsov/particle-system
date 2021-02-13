@@ -1,6 +1,8 @@
 # particle-system
 javascript particle system
 
+![demo](demo.gif)
+
 |Parameter|Value|Description|
 |-|-|-|
 |isControllable|boolean|a world can only have one controllable system|
