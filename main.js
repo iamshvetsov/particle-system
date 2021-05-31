@@ -34,33 +34,30 @@ class World {
         this.particleSystems = [];
         this.controllableParticleSystem = null;
 
-        canvas.addEventListener('mousemove', e => {
-            this.controllableParticleSystem = this.particleSystems.find(system => system.isControllable);
+        canvas.addEventListener('mousemove', (e) => {
+            this.controllableParticleSystem = this.particleSystems.find((system) => system.isControllable);
             this.controllableParticleSystem.coords.x = e.offsetX;
             this.controllableParticleSystem.coords.y = e.offsetY;
         });
 
-        canvas.addEventListener('mousewheel', e => {
+        canvas.addEventListener('mousewheel', (e) => {
             e.preventDefault();
 
-            this.controllableParticleSystem = this.particleSystems.find(system => system.isControllable);
+            this.controllableParticleSystem = this.particleSystems.find((system) => system.isControllable);
             if (e.shiftKey) {
-                this.controllableParticleSystem.particleSize = Math.round(Math.max(
-                    1, this.controllableParticleSystem.particleSize - e.wheelDelta / 100
-                ));
+                this.controllableParticleSystem.particleSize = Math.round(
+                    Math.max(1, this.controllableParticleSystem.particleSize - e.wheelDelta / 100)
+                );
             }
             if (e.altKey) {
-                this.controllableParticleSystem.scatter = Math.max(
-                    0, this.controllableParticleSystem.scatter - e.wheelDelta / 1000
-                );
+                this.controllableParticleSystem.scatter =
+                    Math.max(0, this.controllableParticleSystem.scatter - e.wheelDelta / 1000);
             }
         });
     }
 
-    addParticleSystem = (particleSystem) => this.particleSystems.push(new ParticleSystem({
-        ...particleSystem,
-        context: this.context
-    }));
+    addParticleSystem = (particleSystem) =>
+        this.particleSystems.push(new ParticleSystem({ ...particleSystem, context: this.context }));
 
     start = () => this.tick();
 
@@ -70,13 +67,13 @@ class World {
         window.requestAnimationFrame(this.tick);
     };
 
-    updateWorld = () => this.particleSystems.forEach(system => system.updateParticleSystem());
+    updateWorld = () => this.particleSystems.forEach((system) => system.updateParticleSystem());
 
     drawWorld = () => {
         const { context, params: { canvasWidth, canvasHeight }, particleSystems } = this;
 
         context.clearRect(0, 0, canvasWidth, canvasHeight);
-        particleSystems.forEach(system => system.drawParticleSystem());
+        particleSystems.forEach((system) => system.drawParticleSystem());
     };
 }
 
@@ -96,7 +93,7 @@ class ParticleSystem {
     updateParticleSystem = () => {
         const { context, coords, gravity, maxAmount, creationAmount, particleSize, scatter, particles } = this;
 
-        this.particles = particles.filter(particle => particle.size > 0);
+        this.particles = particles.filter((particle) => particle.size > 0);
         if (this.particles.length + creationAmount <= maxAmount) {
             for (let i = 1; i <= creationAmount; i++) {
                 const particleParams = {
@@ -109,10 +106,10 @@ class ParticleSystem {
                 this.particles.push(new Particle({ ...particleParams, context }));
             }
         }
-        this.particles.forEach(particle => particle.updateParticle());
+        this.particles.forEach((particle) => particle.updateParticle());
     };
 
-    drawParticleSystem = () => this.particles.forEach(particle => particle.drawParticle());
+    drawParticleSystem = () => this.particles.forEach((particle) => particle.drawParticle());
 }
 
 class Particle {
